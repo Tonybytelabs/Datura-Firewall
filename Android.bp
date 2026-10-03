@@ -1,15 +1,22 @@
 android_app {
-    name: "Firewall",
+    name: "Datura",
 
     srcs: ["app/src/main/java/**/*.java"],
     resource_dirs: ["app/src/main/res"],
     manifest: "app/src/main/AndroidManifest.xml",
 
+    // Hidden NetworkPolicyManager / UserManager APIs, so platform_apis; the
+    // platform certificate grants MANAGE_NETWORK_POLICY and the other
+    // signature permissions, privapp-permissions-datura.xml the rest.
     platform_apis: true,
     certificate: "platform",
+    privileged: true,
+    system_ext_specific: true,
 
     static_libs: [
         "androidx.appcompat_appcompat",
+        "androidx.core_core",
+        "androidx.recyclerview_recyclerview",
         "androidx-constraintlayout_constraintlayout",
         "com.google.android.material_material",
     ],
