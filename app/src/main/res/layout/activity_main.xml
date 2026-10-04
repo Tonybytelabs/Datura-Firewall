@@ -65,8 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/container_padding_size"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,28 +74,24 @@
             android:textSize="15sp"
             android:layout_marginBottom="15dp"/>
 
-        <include layout="@layout/fragment_use_defaults"
-            android:layout_marginBottom="25dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+        <include
+            android:id="@+id/kill_switch"
+            layout="@layout/item_global_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <include layout="@layout/fragment_cleartext_traffic"
-            android:layout_marginBottom="25dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
-
-        <include layout="@layout/fragment_block_ad_trackers"
-            android:layout_marginBottom="0dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+        <include
+            android:id="@+id/block_new_apps"
+            layout="@layout/item_global_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"
-        android:visibility="gone"/>
+        android:background="@color/gray" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -8,6 +8,10 @@
     <string name="block_cleartext_etc">Block cleartext traffic, ads, and trackers</string>
     <string name="allow_cleartext">Allow cleartext traffic</string>
     <string name="block_ads_trackers">Block ads and trackers</string>
+    <string name="kill_switch_title">Block all network access</string>
+    <string name="kill_switch_summary">Cuts the network for every app except those with restricted-network permission</string>
+    <string name="block_new_apps_title">Block new apps</string>
+    <string name="block_new_apps_summary">Newly installed apps start with no network access</string>
     <string name="system_apps">System Apps</string>
     <string name="allow_background_data">Allow background network access</string>
     <string name="allow_wifi_data">Allow Wi-Fi data</string>

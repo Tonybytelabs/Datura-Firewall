@@ -7,6 +7,7 @@ import android.content.pm.UserInfo;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -15,9 +16,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,11 +35,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    // Read by PrivacySettings, which applies POLICY_REJECT_ALL to each newly installed app.
+    private static final String BLOCK_NEW_APPS = "aox_block_new_apps";
 
     private RecyclerView mAppList;
     private AppAdapter mAppAdapter;
     private EditText mSearchBar;
     private ImageView mSearchIcon, mSearchClear;
+    private SwitchCompat mKillSwitch, mBlockNewApps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +90,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSearchClear.setOnClickListener(this);
 
         mAppList = findViewById(R.id.app_list);
+
+        mKillSwitch = globalSwitch(R.id.kill_switch, R.string.kill_switch_title,
+                R.string.kill_switch_summary);
+        mKillSwitch.setOnCheckedChangeListener((b, on) ->
+                Settings.Global.putInt(getContentResolver(),
+                        Settings.Global.RESTRICTED_NETWORKING_MODE, on ? 1 : 0));
+        mBlockNewApps = globalSwitch(R.id.block_new_apps, R.string.block_new_apps_title,
+                R.string.block_new_apps_summary);
+        mBlockNewApps.setOnCheckedChangeListener((b, on) ->
+                Settings.Global.putInt(getContentResolver(), BLOCK_NEW_APPS, on ? 1 : 0));
+    }
+
+    private SwitchCompat globalSwitch(int rowId, int title, int summary) {
+        final View row = findViewById(rowId);
+        ((TextView) row.findViewById(R.id.title)).setText(title);
+        ((TextView) row.findViewById(R.id.summary)).setText(summary);
+        return row.findViewById(R.id.toggle);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        // The listeners write the same value back, which is a no-op.
+        mKillSwitch.setChecked(Settings.Global.getInt(getContentResolver(),
+                Settings.Global.RESTRICTED_NETWORKING_MODE, 0) != 0);
+        mBlockNewApps.setChecked(Settings.Global.getInt(getContentResolver(),
+                BLOCK_NEW_APPS, 0) != 0);
 
         final PackageManager pm = getPackageManager();
         final UserManager um = getSystemService(UserManager.class);
